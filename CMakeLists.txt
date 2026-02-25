@@ -14,6 +14,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(OpenCASCADE_DIR "/Users/hangyu/Documents/Mycode/OCCT/install/release/lib/cmake/opencascade")
 
 ########################################################################################################################
 # Include 3rdParty
