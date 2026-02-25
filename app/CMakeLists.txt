@@ -10,7 +10,4 @@ target_include_directories(${PROJECT_NAME}_MAIN
 )
 
 # Add linker options
-foreach (LIB ${OpenCASCADE_LIBRARIES})
-  target_link_libraries(${PROJECT_NAME}_MAIN debug ${OpenCASCADE_LIBRARY_DIR}d/${LIB}.lib)
-  target_link_libraries(${PROJECT_NAME}_MAIN optimized ${OpenCASCADE_LIBRARY_DIR}/${LIB}.lib)
-endforeach()
+target_link_libraries(${PROJECT_NAME}_MAIN PRIVATE ${OpenCASCADE_LIBRARIES})
