@@ -19,8 +19,21 @@ set(OpenCASCADE_DIR "/Users/hangyu/Documents/Mycode/OCCT/install/release/lib/cma
 ########################################################################################################################
 # Include 3rdParty
 ########################################################################################################################
+# We use minimal VTK modules to avoid Qt/Vulkan dependencies from Homebrew VTK
+find_package(VTK REQUIRED COMPONENTS 
+    CommonCore 
+    CommonDataModel 
+    RenderingCore 
+    RenderingOpenGL2 
+    InteractionStyle 
+    InteractionWidgets
+)
+
+# Use simple find_package to load all available OCCT components and handle dependencies
 find_package(OpenCASCADE REQUIRED)
+
 message(STATUS "Found OpenCASCADE ${OpenCASCADE_VERSION}")
+message(STATUS "Found VTK ${VTK_VERSION}")
 
 ########################################################################################################################
 # Add subdirectories
