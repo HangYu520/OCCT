@@ -4,11 +4,13 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/Users/hangyu/Documents/Mycode/OCCT/install/release/include/opencascade"
+                "/Users/hangyu/Documents/Mycode/OCCT/install/release/include/opencascade",
+                "/opt/homebrew/Cellar/vtk/9.5.2_3/include/vtk-9.5"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c17",
+            "cppStandard": "c++20",
             "intelliSenseMode": "macos-clang-arm64"
         }
     ],
