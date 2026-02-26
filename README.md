@@ -3,6 +3,7 @@
 ## Installation  
 ### Dependencies  
 - OpenCASCADE
+- VTK
 
 ### Setup  
 ```bash
