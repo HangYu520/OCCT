@@ -33,7 +33,6 @@ void KeyPressCallbackFunction(vtkObject* caller, long unsigned int eventId, void
         double b = (double)rand() / RAND_MAX;
         actor->GetProperty()->SetColor(r, g, b);
         iren->Render(); // 重新渲染界面
-        printf("按下了 'C' 键：颜色已更改为 (%.2f, %.2f, %.2f)\n", r, g, b);
     }
 }
 
@@ -60,7 +59,7 @@ int main()
     vtkSmartPointer<vtkRenderer> aRenderer = vtkSmartPointer<vtkRenderer>::New();
     vtkSmartPointer<vtkRenderWindow> aRenderWindow = vtkSmartPointer<vtkRenderWindow>::New();
     aRenderWindow->AddRenderer(aRenderer);
-    aRenderWindow->SetWindowName("OCCT 可视化 - 交互示例");
+    aRenderWindow->SetWindowName("Learn-OCCT");
     aRenderWindow->SetSize(800, 600);
 
     vtkSmartPointer<vtkRenderWindowInteractor> anInteractor = vtkSmartPointer<vtkRenderWindowInteractor>::New();
@@ -78,12 +77,6 @@ int main()
     // 5. 显示并启动
     aRenderer->AddActor(anActor);
     aRenderer->SetBackground(0.1, 0.1, 0.1); // 背景色：深灰色
-    
-    printf("--- 交互指南 ---\n");
-    printf("鼠标左键: 旋转 | 右键: 缩放 | 中键: 平移\n");
-    printf("键盘 'r': 重置视角 | 'w': 线框模式 | 's': 实体模式\n");
-    printf("键盘 'c': 随机改变模型颜色\n");
-    printf("----------------\n");
 
     aRenderWindow->Render();
     anInteractor->Start();
