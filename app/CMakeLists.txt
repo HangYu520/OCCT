@@ -1,5 +1,7 @@
 add_executable(${PROJECT_NAME}_MAIN
         main.cpp
+        ${CMAKE_SOURCE_DIR}/src/Viewer.cpp
+        ${CMAKE_SOURCE_DIR}/src/IO.cpp
 )
 
 target_include_directories(${PROJECT_NAME}_MAIN
