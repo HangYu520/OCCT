@@ -17,24 +17,23 @@ int main(int argc, char* argv[])
         }
     }
 
+    Viewer viewer;
     TopoDS_Shape shape;
 
     if (!inputPath.empty()) {
-        std::cout << "Loading file: " << inputPath << std::endl;
+        viewer.Log("Loading file: " + inputPath);
         shape = IO::ReadShape(inputPath);
         if (shape.IsNull()) {
-            std::cerr << "Error: Failed to load shape from " << inputPath << std::endl;
+            viewer.Log("Error: Failed to load shape from " + inputPath);
             return 1;
         }
     } else {
-        // 如果没有输入路径，默认创建一个长方体
-        std::cout << "No input file specified (-i [path]). Creating a default box." << std::endl;
+        viewer.Log("No input file specified. Creating a default box.");
         BRepPrimAPI_MakeBox mkbox(10.0, 20.0, 30.0);
         shape = mkbox.Shape();
     }
 
     // 使用 Viewer 进行可视化
-    Viewer viewer;
     viewer.Show(shape);
     viewer.Start();
 
