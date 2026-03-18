@@ -39,5 +39,5 @@ message(STATUS "Found VTK ${VTK_VERSION}")
 # Add subdirectories
 ########################################################################################################################
 #add_subdirectory(deps)
-#add_subdirectory(src)
+add_subdirectory(src)
 add_subdirectory(app)
