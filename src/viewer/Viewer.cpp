@@ -1,5 +1,4 @@
 #include "Viewer.hpp"
-#include "IO.hpp"
 
 // --- OpenCASCADE 到 VTK 的桥接库 ---
 #include <IVtkTools_ShapeDataSource.hxx>
@@ -41,7 +40,7 @@ Viewer::Viewer() {
     m_textActor->SetPosition(10, 10); // 左下角位置
     m_renderer->AddViewProp(m_textActor);
 
-    Log("Viewer initialized. (C: Random Color | Ctrl+S: Save STEP)");
+    Log("Viewer initialized. (C: Random Color)");
 
     // --- 添加键盘监听 ---
     auto keyPressClick = vtkSmartPointer<vtkCallbackCommand>::New();
@@ -117,15 +116,6 @@ void Viewer::KeyPressCallbackFunction(vtkObject* caller, long unsigned int event
             double b = (double)rand() / RAND_MAX;
             viewer->m_currentActor->GetProperty()->SetColor(r, g, b);
             viewer->Log("Randomized object color.");
-        }
-    } else if ((key == "s" || key == "S") && iren->GetControlKey()) {
-        if (!viewer->m_currentShape.IsNull()) {
-            viewer->Log("Saving shape to save.stp...");
-            if (IO::SaveStep(viewer->m_currentShape, "save.stp")) {
-                viewer->Log("Successfully saved to save.stp");
-            } else {
-                viewer->Log("Error: Failed to save to save.stp");
-            }
         }
     }
 }

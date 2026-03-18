@@ -6,8 +6,8 @@
 #include <iostream>
 #include <string>
 // --- custom ---
-#include "Viewer.hpp"
-#include "IO.hpp"
+#include "viewer/Viewer.hpp"
+#include "io/IO.hpp"
 
 int main(int argc, char* argv[]) 
 {
