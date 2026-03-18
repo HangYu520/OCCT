@@ -1,7 +1,11 @@
+// --- OCCT ---
 #include <BRepPrimAPI_MakeBox.hxx>
 #include <TopoDS_Shape.hxx>
+#include <BRepTools.hxx>
+// --- C++ ---
 #include <iostream>
 #include <string>
+// --- custom ---
 #include "Viewer.hpp"
 #include "IO.hpp"
 
@@ -32,6 +36,9 @@ int main(int argc, char* argv[])
         BRepPrimAPI_MakeBox mkbox(10.0, 20.0, 30.0);
         shape = mkbox.Shape();
     }
+
+    // 打印 shape
+    BRepTools::Dump(shape, std::cout);
 
     // 使用 Viewer 进行可视化
     viewer.Show(shape);
