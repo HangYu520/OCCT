@@ -19,59 +19,61 @@ static std::string getExtension(const std::string& filePath) {
     return ext;
 }
 
-TopoDS_Shape ReadShape(const std::string& filePath) {
+MSG ReadShape(const std::string& filePath, TopoDS_Shape& shape) {
+    MSG msg;
     std::string ext = getExtension(filePath);
     if (ext == "brep") {
-        return ReadBrep(filePath);
+        msg = ReadBrep(filePath, shape);
+        return msg;
     } else if (ext == "stp" || ext == "step") {
-        return ReadStep(filePath);
+        msg = ReadStep(filePath, shape);
+        return msg;
     } else {
-        std::cerr << "Unsupported file extension: ." << ext << std::endl;
-        return TopoDS_Shape();
+        return {false, "Unsupported file extension: ." + ext, LogLevel::Error};
     }
 }
 
-TopoDS_Shape ReadBrep(const std::string& filePath) {
+MSG ReadBrep(const std::string& filePath, TopoDS_Shape& shape) {
     std::ifstream f(filePath.c_str());
     if (!f.good()) {
-        std::cerr << "File does not exist: " << filePath << std::endl;
-        return TopoDS_Shape();
+        return {false, "File does not exist: " + filePath, LogLevel::Error};
     }
 
-    TopoDS_Shape shape;
     BRep_Builder builder;
     if (!BRepTools::Read(shape, filePath.c_str(), builder)) {
-        std::cerr << "BRepTools failed to read BREP file: " << filePath << std::endl;
-        return TopoDS_Shape();
+        return {false, "BRepTools failed to read BREP file: " + filePath, LogLevel::Error};
     }
-    return shape;
+    return {true, "BREP file read successfully: " + filePath, LogLevel::Info};
 }
 
-TopoDS_Shape ReadStep(const std::string& filePath) {
+MSG ReadStep(const std::string& filePath, TopoDS_Shape& shape) {
     STEPControl_Reader reader;
     IFSelect_ReturnStatus status = reader.ReadFile(filePath.c_str());
     if (status != IFSelect_RetDone) {
-        std::cerr << "Failed to read STEP file: " << filePath << " (Status: " << status << ")" << std::endl;
-        return TopoDS_Shape();
+        return {false, "Failed to read STEP file: " + filePath, LogLevel::Error};
     }
 
-    // 传输数据并获取形状
     reader.TransferRoots();
-    return reader.OneShape();
+    shape = reader.OneShape();
+    return {true, "STEP file read successfully: " + filePath, LogLevel::Info};
 }
 
-bool SaveBrep(const TopoDS_Shape& shape, const std::string& filePath) {
-    if (shape.IsNull()) return false;
-    return BRepTools::Write(shape, filePath.c_str());
+MSG SaveBrep(const TopoDS_Shape& shape, const std::string& filePath) {
+    if (shape.IsNull()) 
+        return {false, "Shape is null", LogLevel::Error};
+    BRepTools::Write(shape, filePath.c_str());
+    return {true, "BREP file saved successfully: " + filePath, LogLevel::Info};
 }
 
-bool SaveStep(const TopoDS_Shape& shape, const std::string& filePath) {
-    if (shape.IsNull()) return false;
+MSG SaveStep(const TopoDS_Shape& shape, const std::string& filePath) {
+    if (shape.IsNull()) 
+        return {false, "Shape is null", LogLevel::Error};
     STEPControl_Writer writer;
     IFSelect_ReturnStatus status = writer.Transfer(shape, STEPControl_AsIs);
-    if (status != IFSelect_RetDone) return false;
-    
-    return (writer.Write(filePath.c_str()) == IFSelect_RetDone);
+    if (status != IFSelect_RetDone) 
+        return {false, "Failed to write STEP file: " + filePath, LogLevel::Error};
+    writer.Write(filePath.c_str());
+    return {true, "STEP file saved successfully: " + filePath, LogLevel::Info};
 }
 
 } // namespace IO

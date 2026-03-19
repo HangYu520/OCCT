@@ -26,10 +26,10 @@ int main(int argc, char* argv[])
 
     if (!inputPath.empty()) {
         viewer.Log("Loading file: " + inputPath);
-        shape = IO::ReadShape(inputPath);
-        if (shape.IsNull()) {
-            viewer.Log("Error: Failed to load shape from " + inputPath);
-            return 1;
+        auto res = IO::ReadShape(inputPath, shape);
+        if (!res.success) {
+            std::cout << res.msg << std::endl;
+            return -1;
         }
     } else {
         viewer.Log("No input file specified. Creating a default box.");
