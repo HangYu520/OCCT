@@ -1,3 +1,5 @@
+# ------------- MAIN ----------------
+
 add_executable(${PROJECT_NAME}_MAIN
         main.cpp
 )
@@ -14,3 +16,22 @@ target_link_libraries(OCCT_MAIN
         ${PROJECT_NAME}_IO
         ${OpenCASCADE_LIBRARIES}
 )
+
+# ------------- TASK ----------------
+
+add_executable(${PROJECT_NAME}_TASK
+        task.cpp
+)
+
+target_include_directories(${PROJECT_NAME}_TASK
+        PRIVATE
+        "${CMAKE_SOURCE_DIR}/src"
+        "${CMAKE_SOURCE_DIR}/deps"
+)
+
+target_link_libraries(${PROJECT_NAME}_TASK
+    PRIVATE
+        ${PROJECT_NAME}_IO
+        ${OpenCASCADE_LIBRARIES}
+)
+

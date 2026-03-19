@@ -60,17 +60,21 @@ for (TopoDS_Iterator it(shape); it.More(); it.Next()) {
 ### 4. 自动去重遍历 (`TopExp::MapShapes`)
 
 * **适用场景**：导出无重复的网格线框、统计模型的真实边数/顶点数。
-* **特点**：利用哈希表（Map）将拓扑元素装入集合，完美解决多面共享边导致的重复统计问题。
+* **特点**：利用哈希表（Map）将拓扑元素装入集合，完美解决多面共享边导致的重复统计问题。**注意：在 OCCT 8.0+ 中，原有的 `TopTools_IndexedMapOfShape` 已被弃用。**
 
 ```cpp
-#include <TopTools_IndexedMapOfShape.hxx>
+#include <NCollection_IndexedMap.hxx>
+#include <TopTools_ShapeMapHasher.hxx>
 #include <TopExp.hxx>
+#include <TopoDS.hxx>
 
-TopTools_IndexedMapOfShape edgeMap;
+// 现代写法 (OCCT 8.0+)
+NCollection_IndexedMap<TopoDS_Shape, TopTools_ShapeMapHasher> edgeMap;
 TopExp::MapShapes(shape, TopAbs_EDGE, edgeMap);
 
 for (int i = 1; i <= edgeMap.Extent(); ++i) {
     TopoDS_Edge uniqueEdge = TopoDS::Edge(edgeMap(i));
+    // 处理唯一边...
 }
 
 ```
