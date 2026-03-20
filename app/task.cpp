@@ -16,23 +16,10 @@
 // --- C++ ---
 #include <iostream>
 #include <string>
+// --- custom ---
+#include "utils/Utils.hpp"
 
 namespace { 
-
-    // 辅助函数
-    void printPnt(const gp_Pnt& pnt, bool newLine=true) {
-        std::cout << "("
-                << pnt.X() << ", " 
-                << pnt.Y() << ", " 
-                << pnt.Z() << ")";
-        if(newLine) {
-            std::cout << std::endl;
-        }
-    }
-
-    void printSeg(int num=50) {
-        std::cout << std::string(num, '-') << std::endl;
-    }
 
     /*
     🚀 任务一："点"的审查 —— 顶点去重：
@@ -50,8 +37,7 @@ namespace {
     - 需要用到 BRep_Tool::Pnt()。
     */
     void task01(TopoDS_Shape& box) {
-        printSeg();
-        std::cout << "Task 01: Print unique vertices of a box" << std::endl;
+        Utils::printSeg("Task 01");
         
         NCollection_IndexedMap<TopoDS_Shape, TopTools_ShapeMapHasher> vertexMap;
         TopExp::MapShapes(box, TopAbs_VERTEX, vertexMap);
@@ -62,8 +48,7 @@ namespace {
         for (int i = 1; i <= count; i++) {
             const TopoDS_Shape& vertex = vertexMap(i);
             gp_Pnt pnt = BRep_Tool::Pnt(TopoDS::Vertex(vertex));
-            std::cout << "Vertex " << i << ": ";
-            printPnt(pnt);
+            Utils::printPnt(pnt, "Vertex" + std::to_string(i));
 
             sumX += pnt.X();
             sumY += pnt.Y();
@@ -71,8 +56,10 @@ namespace {
         }
 
         if (count > 0) {
-            std::cout << "Center of " << count << " vertices: ";
-            printPnt(gp_Pnt(sumX / count, sumY / count, sumZ / count));
+            Utils::printPnt(
+                gp_Pnt(sumX / count, sumY / count, sumZ / count),
+                "Center of " + std::to_string(count) + " vertices :"
+            );
         }
     }
 
@@ -100,8 +87,7 @@ namespace {
     - 如果 face.Orientation() == TopAbs_REVERSED，记得调用 .Reverse() 翻转法线向量
     */
    void task02(TopoDS_Shape& box) {
-        printSeg();
-        std::cout << "Task 02: Find the true top face of a box" << std::endl;
+        Utils::printSeg("Task 02");
 
         TopExp_Explorer exp(box, TopAbs_FACE);
         for(; exp.More(); exp.Next()) {
@@ -114,8 +100,7 @@ namespace {
                     dir.Reverse();
                 }
                 if(dir.X() == 0 && dir.Y() == 0 && dir.Z() == 1) {
-                    std::cout << "Top face location: ";
-                    printPnt(plane->Location());
+                    Utils::printPnt(plane->Location(), "Top face location: ");
                     break;
                 }
             }
@@ -144,8 +129,7 @@ namespace {
     - 必须使用 BRepTools_WireExplorer 才能保证顺序
     */
    void task03(TopoDS_Shape& box) { 
-        printSeg();
-        std::cout << "Task 03: Verify the closure of a wire" << std::endl;
+        Utils::printSeg("Task 03");
 
         TopExp_Explorer exp(box, TopAbs_WIRE);
         TopoDS_Wire wire = TopoDS::Wire(exp.Current());
@@ -159,9 +143,9 @@ namespace {
                 std::swap(first, last);
             }
             std::cout << "Edge " << ++edgeCount << ": ";
-            printPnt(curve->Value(first), false);
+            Utils::printPnt(curve->Value(first), "", false);
             std::cout << " -> ";
-            printPnt(curve->Value(last));
+            Utils::printPnt(curve->Value(last));
         }
    }
 
