@@ -1,7 +1,5 @@
 // --- OCCT ---
-#include <BRepPrimAPI_MakeBox.hxx>
-#include <TopoDS_Shape.hxx>
-#include <BRepTools.hxx>
+#include "OCCT_Headers.hpp"
 // --- C++ ---
 #include <iostream>
 #include <string>

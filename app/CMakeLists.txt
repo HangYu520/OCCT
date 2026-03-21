@@ -10,7 +10,12 @@ target_include_directories(${PROJECT_NAME}_MAIN
         "${CMAKE_SOURCE_DIR}/deps"
 )
 
-target_link_libraries(OCCT_MAIN
+target_precompile_headers(${PROJECT_NAME}_MAIN 
+        PRIVATE 
+        "${CMAKE_SOURCE_DIR}/src/OCCT_Headers.hpp"
+)
+
+target_link_libraries(${PROJECT_NAME}_MAIN 
     PRIVATE
         ${PROJECT_NAME}_VIEWER
         ${PROJECT_NAME}_IO
@@ -30,12 +35,15 @@ target_include_directories(${PROJECT_NAME}_TASK
         "${CMAKE_SOURCE_DIR}/deps"
 )
 
+target_precompile_headers(${PROJECT_NAME}_TASK REUSE_FROM ${PROJECT_NAME}_MAIN)
+
 target_link_libraries(${PROJECT_NAME}_TASK
     PRIVATE
         ${PROJECT_NAME}_IO
         ${PROJECT_NAME}_UTILS
         ${OpenCASCADE_LIBRARIES}
 )
+
 
 # ------------- MAKE BOTTLE ----------------
 
@@ -49,7 +57,9 @@ target_include_directories(${PROJECT_NAME}_BOTTLE
         "${CMAKE_SOURCE_DIR}/deps"
 )
 
-target_link_libraries(OCCT_BOTTLE
+target_precompile_headers(${PROJECT_NAME}_BOTTLE REUSE_FROM ${PROJECT_NAME}_MAIN)
+
+target_link_libraries(${PROJECT_NAME}_BOTTLE
     PRIVATE
         ${PROJECT_NAME}_VIEWER
         ${PROJECT_NAME}_IO

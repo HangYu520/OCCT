@@ -1,18 +1,5 @@
 // --- OCCT ---
-#include <NCollection_IndexedMap.hxx>
-#include <TopTools_ShapeMapHasher.hxx>
-#include <BRepPrimAPI_MakeBox.hxx>
-#include <BRepTools_WireExplorer.hxx>
-#include <TopExp_Explorer.hxx>
-#include <Geom_Plane.hxx>
-#include <TopoDS_Shape.hxx>
-#include <TopoDS_Face.hxx>
-#include <BRep_Tool.hxx>
-#include <TopoDS.hxx>
-#include <TopExp.hxx>
-#include <gp_Pnt.hxx>
-#include <gp_Dir.hxx>
-#include <gp_Pln.hxx>
+#include "OCCT_Headers.hpp"
 // --- C++ ---
 #include <iostream>
 #include <string>

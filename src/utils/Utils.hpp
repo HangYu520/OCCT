@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gp_Pnt.hxx>
+#include <TopoDS_Shape.hxx>
 #include <string>
 
 namespace Utils { 
@@ -19,4 +20,10 @@ namespace Utils {
      * @param num Number of segments to print
      */
     void printSeg(const std::string& name="", char seg='=', int num=50);
+
+    /**
+     * Count the number of edges in a shape
+     * @param shape Shape to count the edges
+     */
+    int countEdges(const TopoDS_Shape& shape);
 }
