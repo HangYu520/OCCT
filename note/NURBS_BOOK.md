@@ -195,3 +195,33 @@ $$ \mathbf{C}(u) = \frac{\text{Perspective projection of } \mathbf{C}^w(u)}{W(u)
 利用齐次坐标，我们可以直接对 4D 点 $\mathbf{P}_i^w$ 应用标准的 De Casteljau 算法。计算出的 4D 结果点最后投影回 3D 空间，即可得到有理曲线上的点。这种方法在数值计算上非常稳健且易于实现。
 
 ### 1.4 张量积曲面 (Tensor Product Surfaces)
+
+张量积曲面是通过将两个参数方向的基函数进行组合（乘积）来定义的，这是构建参数曲面最常用且最直接的方法。
+
+#### 1. 贝塞尔曲面的定义
+一个 $n \times m$ 次的贝塞尔曲面由一个 $(n+1) \times (m+1)$ 的控制点网格 $\{\mathbf{P}_{i,j}\}$ 定义：
+$$
+\mathbf{S}(u, v) = \sum_{i=0}^n \sum_{j=0}^m B_{i,n}(u) B_{j,m}(v) \mathbf{P}_{i,j}, \quad u, v \in [0, 1]
+$$
+其中：
+- $B_{i,n}(u)$ 和 $B_{j,m}(v)$ 分别是 $u$ 和 $v$ 方向的伯恩斯坦基函数。
+- $\{\mathbf{P}_{i,j}\}$ 称为**控制网格 (Control Mesh)** 或控制网。
+
+![Tensor Product Bézier Surface](../images/bezier_surface.png)
+
+#### 2. 性质与特点
+*   **端点插值：** 曲面经过控制网格的四个角点：$\mathbf{P}_{0,0}, \mathbf{P}_{n,0}, \mathbf{P}_{0,m}, \mathbf{P}_{n,m}$。
+*   **边界曲线：** 曲面的四条边界线是分别由控制网格的边界行/列定义的贝塞尔曲线。例如，$v=0$ 时的边界曲线是由 $\{\mathbf{P}_{i,0}\}$ 定义的 $n$ 次贝塞尔曲线。
+*   **凸包性：** 整个曲面完全落在所有控制点构成的凸包之内。
+*   **角点切平面：** 曲面在角点处的切平面由与该角点相邻的控制点确定。例如，在 $(0,0)$ 点：
+    - $\mathbf{S}_u(0,0) = n(\mathbf{P}_{1,0} - \mathbf{P}_{0,0})$
+    - $\mathbf{S}_v(0,0) = m(\mathbf{P}_{0,1} - \mathbf{P}_{0,0})$
+*   **分离性 (Separability)：** 公式可以重写为先对 $j$ 求和（生成 $u$ 的中间曲线），再对 $i$ 求和：
+    $$ \mathbf{S}(u, v) = \sum_{i=0}^n B_{i,n}(u) \left( \sum_{j=0}^m B_{j,m}(v) \mathbf{P}_{i,j} \right) $$
+    这表明曲面的计算可以通过多次调用曲线计算算法来实现。
+
+#### 3. 曲面的评估 (De Casteljau 算法扩展)
+对于给定的 $(u_0, v_0)$，可以通过以下步骤计算曲面上的点：
+1.  对控制网格的每一行（或列），应用 De Casteljau 算法计算出在参数 $v_0$ 处的点。这将得到 $n+1$ 个新的中间控制点。
+2.  对这 $n+1$ 个中间控制点应用一次 De Casteljau 算法，计算出在参数 $u_0$ 处的值。
+最终得到的结果即为 $\mathbf{S}(u_0, v_0)$。
