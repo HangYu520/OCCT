@@ -84,11 +84,13 @@
 #include <BRepPrimAPI_MakeSphere.hxx>
 #include <BRepPrimAPI_MakeCone.hxx>
 #include <BRepPrimAPI_MakeTorus.hxx>
+#include <BRepPrimAPI_MakePrism.hxx>
 #include <BRepAlgoAPI_BooleanOperation.hxx>
 #include <BRepAlgoAPI_Fuse.hxx>
 #include <BRepAlgoAPI_Cut.hxx>
 #include <BRepAlgoAPI_Common.hxx>
 #include <BRepLib.hxx>            // [新增] BRepLib::BuildPCurveForEdgeOnFace 补救 PCurve 必备
+#include <BRepFilletAPI_MakeFillet.hxx> // [新增] 边缘圆角
 
 // --- OCCT Construction Helpers ---
 #include <GC_MakeArcOfCircle.hxx>
