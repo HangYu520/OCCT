@@ -111,6 +111,19 @@ namespace {
         }
         myBody = mkFillet.Shape();
 
+        // * 2.3 创建颈部 (Neck)
+        gp_Pnt neckLoaction = gp_Pnt(0, 0, myHeight);
+        gp_Dir neckAxis = gp::DZ();
+        gp_Ax2 neckAx2(neckLoaction, neckAxis); // 局部坐标系
+
+        // 创建圆柱体
+        TopoDS_Shape myNeck = BRepPrimAPI_MakeCylinder(
+            neckAx2, myThickness / 4., myHeight / 10.
+        ).Shape();
+
+        // 融合 neck 和 body
+        myBody = BRepAlgoAPI_Fuse(myBody, myNeck);
+
         #if defined(COUT)
         Utils::printSeg("Bottle Body");
         BRepTools::Dump(myBody, std::cout);
