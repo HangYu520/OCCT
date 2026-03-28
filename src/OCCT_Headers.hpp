@@ -91,6 +91,7 @@
 #include <BRepAlgoAPI_Common.hxx>
 #include <BRepLib.hxx>            // [新增] BRepLib::BuildPCurveForEdgeOnFace 补救 PCurve 必备
 #include <BRepFilletAPI_MakeFillet.hxx> // [新增] 边缘圆角
+#include <BRepOffsetAPI_MakeThickSolid.hxx>
 
 // --- OCCT Construction Helpers ---
 #include <GC_MakeArcOfCircle.hxx>
@@ -107,6 +108,7 @@
 #include <BRepTools_WireExplorer.hxx>     // [新增] 有序遍历 Wire 里的 Edge 必备！
 #include <TopTools_IndexedMapOfShape.hxx> // [新增] TopExp::MapShapes 拓扑去重必备！
 #include <NCollection_IndexedMap.hxx>
+#include <NCollection_List.hxx>
 #include <TopTools_ShapeMapHasher.hxx>
 
 // --- OCCT Properties (包围盒、体积、面积、重心) ---
