@@ -124,10 +124,28 @@ namespace {
         // 融合 neck 和 body
         myBody = BRepAlgoAPI_Fuse(myBody, myNeck);
 
-        #if defined(COUT)
-        Utils::printSeg("Bottle Body");
-        BRepTools::Dump(myBody, std::cout);
-        #endif
+        // * 2.4 挖空实体 (Hollowed)
+        TopoDS_Face faceToRemove;
+        double zMax = -DBL_MAX; // 找到最顶面
+
+        TopExp_Explorer aFaceExplorer(myBody, TopAbs_FACE);
+        for(; aFaceExplorer.More(); aFaceExplorer.Next()) {
+            TopoDS_Face aFace = TopoDS::Face(aFaceExplorer.Current());
+            Handle(Geom_Surface) aSurface = BRep_Tool::Surface(aFace);
+            if(aSurface->DynamicType() == STANDARD_TYPE(Geom_Plane)) {
+                Handle(Geom_Plane) aPlane = Handle(Geom_Plane)::DownCast(aSurface);
+                if(aPlane->Location().Z() > zMax) {
+                    zMax = aPlane->Location().Z();
+                    faceToRemove = aFace;
+                }
+            }
+        }
+
+        NCollection_List<TopoDS_Shape>  shapesToRemove;
+        shapesToRemove.Append(faceToRemove);
+        BRepOffsetAPI_MakeThickSolid aSolidMaker;
+        aSolidMaker.MakeThickSolidByJoin(myBody, shapesToRemove, -myThickness / 50., 1.e-3);
+        myBody = aSolidMaker.Shape();
     }
 }
 
